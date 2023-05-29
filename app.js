@@ -15,7 +15,23 @@ app.get('/books', (req, res) => {
 		const { data: books, status } = fileUtils.readJSONFile(BOOKS_FILE)
 		res.status(status).render('books', { books })
 	} catch (error) {
-		res.status(500).send('Invalid book file')
+		res.status(500).send(error.message)
+	}
+})
+
+app.get('/books/:id', (req, res) => {
+	try {
+		const id = parseInt(req.params.id)
+		if (isNaN(id) || !Number.isInteger(id)) {
+			res.status(400).send('Invalid ID parameter. It must be an integer')
+		}
+
+		const { data: books, status } = fileUtils.readJSONFile(BOOKS_FILE)
+
+		const book = books.find(e => e.id === id)
+		res.status(status).render('book-details', { book, id })
+	} catch (error) {
+		res.status(500).send(error.message)
 	}
 })
 
