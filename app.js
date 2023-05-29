@@ -24,6 +24,7 @@ app.get('/books/:id', (req, res) => {
 		const id = parseInt(req.params.id)
 		if (isNaN(id) || !Number.isInteger(id)) {
 			res.status(400).send('Invalid ID parameter. It must be an integer')
+			return
 		}
 
 		const { data: books, status } = fileUtils.readJSONFile(BOOKS_FILE)
