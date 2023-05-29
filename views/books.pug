@@ -1,0 +1,14 @@
+html
+  head
+    title Book List
+
+  body
+    h1 Book List
+
+    if books.length === 0
+      p No books available.
+    else
+      ul
+        each book in books
+          li
+            a(href=`/books/${book.id}`) #{book.name}
