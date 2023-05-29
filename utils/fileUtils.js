@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 
 function readJSONFile(filePath) {
-	const relativePath = path.resolve('data', filePath)
+	const relativePath = path.relative('./', `data/${filePath}`)
 
 	if (!fs.existsSync(relativePath)) {
 		fs.writeFileSync(relativePath, '[]', 'utf8')
