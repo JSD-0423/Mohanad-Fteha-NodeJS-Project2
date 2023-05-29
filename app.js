@@ -12,8 +12,8 @@ const BOOKS_FILE = 'books.json'
 
 app.get('/books', (req, res) => {
 	try {
-		const books = fileUtils.readJSONFile(BOOKS_FILE)
-		res.render('books', { books })
+		const { data: books, status } = fileUtils.readJSONFile(BOOKS_FILE)
+		res.status(status).render('books', { books })
 	} catch (error) {
 		res.status(500).send('Invalid book file')
 	}

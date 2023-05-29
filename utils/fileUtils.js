@@ -6,11 +6,11 @@ function readJSONFile(filePath) {
 
 	if (!fs.existsSync(relativePath)) {
 		fs.writeFileSync(relativePath, '[]', 'utf8')
-		return []
+		return { data: [], status: 201 }
 	}
 
 	const fileContents = fs.readFileSync(relativePath, 'utf8')
-	return JSON.parse(fileContents)
+	return { data: JSON.parse(fileContents), status: 200 }
 }
 
 module.exports = {
