@@ -66,7 +66,7 @@ app.post('/books', (req, res) => {
 
 	books.push(newBook)
 
-	fs.writeFile('./data/books.json', JSON.stringify(books))
+	fs.writeFile('./data/books.json', JSON.stringify(books, 0, 3))
 	res.status(301).send('Data is appended correctly')
 })
 
