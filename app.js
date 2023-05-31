@@ -49,8 +49,6 @@ app.get('/books/:id', (req, res) => {
 })
 
 app.post('/books', validateBook, (req, res) => {
-	res.setHeader('Content-type', 'application/json')
-
 	const errors = validationResult(req)
 	if (!errors.isEmpty()) {
 		return res.status(422).json({ errors: errors.array() })
