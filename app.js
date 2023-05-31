@@ -56,7 +56,7 @@ app.post('/books', (req, res) => {
 
 	let newBook = new Book(id, name)
 
-	const { data: books, status } = fileUtils.readJSONFile(BOOKS_FILE)
+	const { data: books } = fileUtils.readJSONFile(BOOKS_FILE)
 
 	if (books.find(e => e.id === id)) {
 		res.status(400).send('Sorry the id exists, please choose another id')
