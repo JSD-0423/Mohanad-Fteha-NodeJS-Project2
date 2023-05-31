@@ -5,6 +5,7 @@ const pug = require('pug')
 const Book = require('./dto/book')
 const fs = require('fs/promises')
 const bodyParser = require('body-parser')
+const { check, validationResult } = require('express-validator')
 
 const app = express()
 
@@ -14,6 +15,12 @@ app.set('view engine', 'pug')
 app.set('views', path.resolve('./views'))
 
 const BOOKS_FILE = 'books.json'
+
+const validateBook = [
+	check('id', `id doesn't exist`).exists(),
+	check('id', `id must be an integer`).isInt(),
+	check('name', `name doesn't exist`).exists()
+]
 
 app.get('/books', (req, res) => {
 	try {
@@ -41,19 +48,15 @@ app.get('/books/:id', (req, res) => {
 	}
 })
 
-app.post('/books', (req, res) => {
+app.post('/books', validateBook, (req, res) => {
 	res.setHeader('Content-type', 'application/json')
 
-	if (!req.body) {
-		res.status(400).send('There is no data to add')
-		return
+	const errors = validationResult(req)
+	if (!errors.isEmpty()) {
+		return res.status(422).json({ errors: errors.array() })
 	}
-	let { id, name } = req.body
 
-	if (!id || !name) {
-		res.status(400).send('(id, name) must be filled')
-		return
-	}
+	let { id, name } = req.body
 
 	let newBook = new Book(id, name)
 
