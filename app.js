@@ -68,7 +68,7 @@ app.post('/books', validateBook, (req, res) => {
 	books.push(newBook)
 
 	fs.writeFile('./data/books.json', JSON.stringify(books, 0, 3))
-	res.status(301).send('Data is appended correctly')
+	res.status(201).send('Data is appended correctly')
 })
 
 app.get('*', (req, res) => {
