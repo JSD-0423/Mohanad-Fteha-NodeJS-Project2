@@ -70,6 +70,10 @@ app.post('/books', (req, res) => {
 	res.status(301).send('Data is appended correctly')
 })
 
+app.get('*', (req, res) => {
+	res.status(404).send('404, Not Found')
+})
+
 app.listen(8080, () => {
 	console.log('Server is running')
 })
