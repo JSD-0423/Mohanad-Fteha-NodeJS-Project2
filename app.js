@@ -5,7 +5,7 @@ const pug = require('pug')
 const Book = require('./dto/book')
 const fs = require('fs/promises')
 const bodyParser = require('body-parser')
-const { check, validationResult } = require('express-validator')
+const { check, validationResult, param } = require('express-validator')
 
 const app = express()
 
@@ -22,6 +22,12 @@ const validateBook = [
 	check('name', `name doesn't exist`).exists()
 ]
 
+const validateIdParam = [
+	param('id', `Id doesn't exist`),
+	param('id', `Id must be an integer`).isInt(),
+	param('id').toInt()
+]
+
 app.get('/books', (req, res) => {
 	try {
 		const { data: books, status } = fileUtils.readJSONFile(BOOKS_FILE)
@@ -31,13 +37,15 @@ app.get('/books', (req, res) => {
 	}
 })
 
-app.get('/books/:id', (req, res) => {
+app.get('/books/:id', validateIdParam, (req, res) => {
 	try {
-		const id = parseInt(req.params.id)
-		if (isNaN(id) || !Number.isInteger(id)) {
-			res.status(400).send('Invalid ID parameter. It must be an integer')
-			return
+		const errors = validationResult(req)
+
+		if (!errors.isEmpty()) {
+			return res.status(422).json({ errors: errors.array() })
 		}
+
+		const { id } = req.params
 
 		const { data: books, status } = fileUtils.readJSONFile(BOOKS_FILE)
 
@@ -60,7 +68,8 @@ app.post('/books', validateBook, (req, res) => {
 
 	const { data: books } = fileUtils.readJSONFile(BOOKS_FILE)
 
-	if (books.find(e => e.id === id)) {
+	let isIdExist = books.find(e => e.id === id)
+	if (isIdExist) {
 		res.status(400).send('Sorry the id exists, please choose another id')
 		return
 	}
