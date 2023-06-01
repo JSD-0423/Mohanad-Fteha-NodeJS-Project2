@@ -1,7 +1,6 @@
 const express = require('express')
 const path = require('path')
 const fileUtils = require('./utils/fileUtils')
-const pug = require('pug')
 const Book = require('./dto/book')
 const fs = require('fs/promises')
 const bodyParser = require('body-parser')
